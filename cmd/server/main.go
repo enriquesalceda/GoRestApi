@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+
+	transportHTTP "github.com/enriquesalceda/GoRestApi/internal/transport/http"
+)
 
 // App:
 // The struct which contains things like
@@ -9,6 +14,15 @@ type App struct{}
 
 func (app *App) Run() error {
 	fmt.Println("Setting up our APP")
+
+	handler := transportHTTP.NewHandler()
+	handler.SetupRoutes()
+
+	if err := http.ListenAndServe(":8080", handler.Router); err != nil {
+		fmt.Println("Failed to setup the server")
+		return err
+	}
+
 	return nil
 }
 
