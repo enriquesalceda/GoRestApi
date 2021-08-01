@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/enriquesalceda/GoRestApi/internal/database"
 	transportHTTP "github.com/enriquesalceda/GoRestApi/internal/transport/http"
 )
 
@@ -14,6 +15,15 @@ type App struct{}
 
 func (app *App) Run() error {
 	fmt.Println("Setting up our APP")
+
+	var err error
+	db, err := database.NewDatabase()
+
+	if err != nil {
+		return err
+	}
+
+	db.Raw("select * from pg_tables where schemaname = 'information_schema'")
 
 	handler := transportHTTP.NewHandler()
 	handler.SetupRoutes()
