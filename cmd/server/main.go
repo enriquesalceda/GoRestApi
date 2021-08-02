@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/enriquesalceda/GoRestApi/internal/comment"
 	"github.com/enriquesalceda/GoRestApi/internal/database"
 	transportHTTP "github.com/enriquesalceda/GoRestApi/internal/transport/http"
 )
@@ -23,9 +24,9 @@ func (app *App) Run() error {
 		return err
 	}
 
-	db.Raw("select * from pg_tables where schemaname = 'information_schema'")
+	commentService := comment.NewService(db)
 
-	handler := transportHTTP.NewHandler()
+	handler := transportHTTP.NewHandler(commentService)
 	handler.SetupRoutes()
 
 	if err := http.ListenAndServe(":8080", handler.Router); err != nil {
