@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-api
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      name: comments-api
+  template:
+    metadata:
+      labels:
+        name: comments-api
+    spec:
+      containers:
+      - name: application
+        image: "enriquesalceda/comments-api:latest" 
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+        env:
+          - name: DB_PORT
+            value: "$DO_DB_PORT"
+          - name: DB_HOST
+            value: "$DO_DB_HOST"
+          - name: DB_PASSWORD
+            value: "$DO_DB_PASSWORD"
+          - name: DB_TABLE
+            value: "$DO_DB_TABLE"
+          - name: DB_USERNAME
+            value: "$DO_DB_USERNAME"
