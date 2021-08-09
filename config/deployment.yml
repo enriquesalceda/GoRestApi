@@ -35,3 +35,5 @@ spec:
             value: "$DO_DB_TABLE"
           - name: DB_USERNAME
             value: "$DO_DB_USERNAME"
+          - name: SSL_MODE
+            value: "require"
